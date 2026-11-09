@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "argmax-shim"
+version = "0.1.0"
+description = "DEVELOPMENT-ONLY Python stand-in for the Argmax SDK (WhisperKit, SpeakerKit, TTSKit) on Windows and Linux."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "soundfile>=0.12",
+    "huggingface_hub>=0.23",
+]
+
+[project.optional-dependencies]
+# Audio input / playback
+mic = ["sounddevice>=0.4.6"]
+# WhisperKit backends
+whisper = ["faster-whisper>=1.1"]
+parakeet = ["nemo_toolkit[asr]>=2.3"]
+qwen-asr = ["qwen-asr"]
+# SpeakerKit backends
+pyannote = ["pyannote.audio>=4.0", "torch"]
+sortformer = ["nemo_toolkit[asr]>=2.3"]
+# TTSKit engines
+tts-qwen = ["qwen-tts"]
+tts-kokoro = ["kokoro>=0.9", "torch"]
+tts-piper = ["piper-tts>=1.3"]
+tts-system = ["pyttsx3>=2.90"]
+# Bundles. NOTE: qwen-asr and tts-qwen need different transformers versions; use separate envs.
+light = ["argmax-shim[mic,whisper,pyannote,tts-kokoro]"]
+dev = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+include = ["argmax_shim*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
